@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book {{ pg.pg_name }}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Center QR & give padding */
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #qr_section {
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+
+        <h2 class="mb-3 text-center">Book {{ pg.pg_name }}</h2>
+
+        <!-- FORM STARTS -->
+        <form id="bookingForm" method="POST">
+            {% csrf_token %}
+
+            <!-- Price per Day -->
+            <div class="mb-3">
+                <label>Price per Day</label>
+                <input type="text" class="form-control" value="₹{{ rent }}" readonly>
+                <input type="hidden" id="price_per_day" value="{{ rent }}">
+            </div>
+
+            <!-- Check-in -->
+            <div class="mb-3">
+                <label>Check-in Date</label>
+                <input type="date" id="check_in" name="check_in" class="form-control" required>
+            </div>
+
+            <!-- Check-out -->
+            <div class="mb-3">
+                <label>Check-out Date</label>
+                <input type="date" id="check_out" name="check_out" class="form-control" required>
+            </div>
+
+            <!-- Final Amount -->
+            <div class="mb-3">
+                <label>Total Amount</label>
+                <input type="text" id="total_amount" class="form-control" readonly>
+                <input type="hidden" id="final_amount" name="amount">
+            </div>
+
+            <!-- Step 1 button -->
+            <button type="button" class="btn btn-success w-100" id="qrButton">
+                Confirm & Generate QR
+            </button>
+        </form>
+        <!-- FORM ENDS -->
+
+        <!-- QR Section -->
+        <div id="qr_section" class="text-center mt-4" style="display:none;">
+            <h4>Scan to Pay</h4>
+            <div id="qrcode"></div>
+        </div>
+
+        <!-- Step 2 submit button -->
+        <div id="submit_section" class="mt-3" style="display:none;">
+            <button form="bookingForm" type="submit" class="btn btn-primary w-100">
+                Submit Booking
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<!-- QR Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+    const pricePerDay = parseInt(document.getElementById("price_per_day").value);
+
+    document.getElementById("check_in").addEventListener("change", calculateAmount);
+    document.getElementById("check_out").addEventListener("change", calculateAmount);
+
+    function calculateAmount() {
+        const checkIn = new Date(document.getElementById("check_in").value);
+        const checkOut = new Date(document.getElementById("check_out").value);
+
+        if (checkIn && checkOut && checkOut > checkIn) {
+            const days = (checkOut - checkIn) / (1000 * 60 * 60 * 24);
+            const total = days * pricePerDay;
+
+            document.getElementById("total_amount").value = "₹" + total;
+            document.getElementById("final_amount").value = total;
+        }
+    }
+
+    // Step 1 → Generate QR
+    document.getElementById("qrButton").addEventListener("click", function () {
+        let amount = document.getElementById("final_amount").value;
+
+        if (!amount || isNaN(amount)) {
+            alert("Select valid dates first!");
+            return;
+        }
+
+        const qrText = "PAY:" + amount;
+
+        document.getElementById("qrcode").innerHTML = "";
+        document.getElementById("qr_section").style.display = "block";
+
+        new QRCode(document.getElementById("qrcode"), {
+            text: qrText,
+            width: 200,
+            height: 200,
+            correctLevel: QRCode.CorrectLevel.L
+        });
+
+        // now show the submit button
+        document.getElementById("submit_section").style.display = "block";
+    });
+</script>
+
+</body>
+</html>

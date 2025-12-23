@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admin Dashboard - WeekendGo</title>
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+  <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .dashboard-card {
+      min-height: 350px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    canvas {
+      max-height: 250px;
+    }
+  </style>
+</head>
+<body style="background-color:white;">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#800000;">
+  <div class="container">
+
+    <!-- Brand -->
+    <a class="navbar-brand fw-bold" href="/home/" style="font-size: 22px;">
+        WeekendGo Admin
+    </a>
+
+    <!-- Right Side Buttons -->
+    <div class="ms-auto d-flex align-items-center">
+
+      <a href="/admin-panel/manage-data/" class="btn btn-outline-light btn-sm me-3">
+        Manage Hotels
+      </a>
+
+      <a href="/logout/" class="btn btn-outline-light btn-sm me-3">
+        Logout
+      </a>
+
+    </div>
+
+  </div>
+</nav>
+
+
+<div class="container mt-5">
+  <h2 class="text-center text-danger mb-4">Admin Dashboard</h2>
+
+  <!-- First Row -->
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="card shadow p-3 rounded dashboard-card">
+        <h5 class="text-center text-danger">Sentiment Analysis</h5>
+        <canvas id="sentimentChart"></canvas>
+      </div>
+    </div>
+    <div class="col-md-6 mb-4">
+      <div class="card shadow p-3 rounded dashboard-card">
+        <h5 class="text-center text-danger">Monthly Sales</h5>
+        <canvas id="monthlyChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Second Row -->
+  <div class="row">
+    <div class="col-md-12 mb-4">
+      <div class="card shadow p-3 rounded dashboard-card">
+        <h5 class="text-center text-danger">Yearly Sales</h5>
+        <canvas id="yearlyChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Third Row -->
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="card shadow p-3 rounded dashboard-card">
+        <h5 class="text-center text-danger">Bookings Over Time</h5>
+        <canvas id="bookingsChart"></canvas>
+      </div>
+    </div>
+    <div class="col-md-6 mb-4">
+      <div class="card shadow p-3 rounded dashboard-card">
+        <h5 class="text-center text-danger">Top Hotels and Villas by Revenue</h5>
+        <canvas id="topPGsChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fourth Row -->
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="card shadow p-3 rounded dashboard-card">
+        <h5 class="text-center text-danger">Booking Duration Distribution</h5>
+        <canvas id="durationChart"></canvas>
+      </div>
+    </div>
+    <div class="col-md-6 mb-4">
+      <div class="card shadow p-3 rounded dashboard-card">
+        <h5 class="text-center text-danger">Repeat Customers</h5>
+        <canvas id="repeatChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Charts Script -->
+<script>
+  const sentimentData = JSON.parse('{{ sentiment_data|escapejs }}');
+  const monthlyData = JSON.parse('{{ monthly_sales|escapejs }}');
+  const yearlyData = JSON.parse('{{ yearly_sales|escapejs }}');
+  const bookingsData = JSON.parse('{{ bookings_data|escapejs }}');
+  const topPGsData = JSON.parse('{{ top_pgs_data|escapejs }}');
+  const durationData = JSON.parse('{{ duration_data|escapejs }}');
+  const repeatData = JSON.parse('{{ repeat_data|escapejs }}');
+
+  // Sentiment Pie Chart
+  new Chart(document.getElementById('sentimentChart'), {
+    type: 'pie',
+    data: {
+      labels: Object.keys(sentimentData),
+      datasets: [{ data: Object.values(sentimentData), backgroundColor: ['#28a745', '#ffc107', '#dc3545'] }]
+    }
+  });
+
+  // Monthly Sales Bar Chart
+  new Chart(document.getElementById('monthlyChart'), {
+    type: 'bar',
+    data: {
+      labels: Object.keys(monthlyData),
+      datasets: [{ label: 'Sales', data: Object.values(monthlyData), backgroundColor: '#dc3545' }]
+    }
+  });
+
+  // Yearly Sales Line Chart
+  new Chart(document.getElementById('yearlyChart'), {
+    type: 'line',
+    data: {
+      labels: Object.keys(yearlyData),
+      datasets: [{ label: 'Yearly Sales', data: Object.values(yearlyData), borderColor: '#800000', backgroundColor: 'rgba(220,53,69,0.2)', fill: true, tension: 0.3 }]
+    }
+  });
+
+  // Bookings Over Time
+  new Chart(document.getElementById('bookingsChart'), {
+    type: 'line',
+    data: {
+      labels: Object.keys(bookingsData),
+      datasets: [{ label: 'Bookings', data: Object.values(bookingsData), borderColor: '#007bff', backgroundColor: 'rgba(0,123,255,0.2)', fill: true, tension: 0.3 }]
+    }
+  });
+
+  // Top PGs by Revenue
+  new Chart(document.getElementById('topPGsChart'), {
+    type: 'bar',
+    data: {
+      labels: Object.keys(topPGsData),
+      datasets: [{ label: 'Revenue', data: Object.values(topPGsData), backgroundColor: '#17a2b8' }]
+    }
+  });
+
+  // Booking Duration Distribution
+  new Chart(document.getElementById('durationChart'), {
+    type: 'bar',
+    data: {
+      labels: durationData.map((_, i) => `Booking ${i+1}`),
+      datasets: [{ label: 'Duration (days)', data: durationData, backgroundColor: '#ffc107' }]
+    }
+  });
+
+  // Repeat Customers
+  new Chart(document.getElementById('repeatChart'), {
+    type: 'pie',
+    data: {
+      labels: Object.keys(repeatData),
+      datasets: [{ data: Object.values(repeatData), backgroundColor: ['#28a745', '#dc3545', '#ffc107', '#17a2b8', '#800000'] }]
+    }
+  });
+</script>
+</body>
+</html>

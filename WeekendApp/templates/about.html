@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>About</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+
+
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+
+  <!-- Bootstrap CSS File -->
+  <link href="/static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="/static/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/static/lib/animate/animate.min.css" rel="stylesheet">
+  <link href="/static/lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+  <link href="/static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+  <!-- Main Stylesheet File -->
+  <link href="/static/css/style.css" rel="stylesheet">
+
+</head>
+
+<body style="background-color:white;color:red;">
+{% load static %}
+  <div class="click-closed"></div>
+  <!--/ Form Search Star /-->
+
+  <!--/ Form Search End /-->
+
+  <!--/ Nav Star /-->
+   <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top" style="background-color:#FAF9F6">
+  <div class="container">
+    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault"
+      aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+
+    <img src="{% static 'img/wlogo.png' %}" alt="" class="img-a img-fluid" style="height: 100px;">
+
+    <div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
+      <ul class="navbar-nav" style="color:#5C4033;">
+        <li class="nav-item"><a class="nav-link " href="/home/" style="color:red">Home</a></li>
+        <li class="nav-item"><a class="nav-link active" href="/about/" style="color:red">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="/pgs/" style="color:red">Villas and Resorts</a></li>
+        <li class="nav-item"><a class="nav-link " href="/feedback/" style="color:red">Feedback</a></li>
+        <li class="nav-item"><a class="nav-link " href="/my_bookings/" style="color:red">My Bookings</a></li>
+      </ul>
+    </div>
+
+    <div style="float: right; margin-right: 20px;">
+      <ul style="list-style-type:none;">
+        {% if user.is_authenticated %}
+          <li><a> Welcome {{user.username}}</a></li>
+          <li><a href="/bookmarks/">Bookmarks</a></li>
+          <li><a href="/logout/">Logout</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+  <!--/ Nav End /-->
+
+  <!--/ Intro Single star /-->
+  <section class="intro-single" style="display: flex;
+    justify-content: center;
+    align-items: center;      /*
+    min-height: 100vh;      ">
+    <div class="container" style="text-align: center;     ">
+      <div class="row" style="display: flex;
+    justify-content: center;">
+        <div class="col-md-12 col-lg-8" style="text-align: center;  ">
+          <div class="title-single-box">
+            <h1 class="title-single" style="color:red;">Explore Premium Living</h1>
+          </div>
+          <p style="text-align: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-top: 10px;
+    margin-bottom: 10px;color:red;">Discover the best Villas and Resort accommodation in Ahmedabad<br>
+          With WeekendGo Find detailed information on room rents and available options in area</p>
+        </div>
+        <div class="col-md-12 col-lg-4" style="text-align: center;  ">
+          <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+               <div class="img-box-a">
+              <img src="{% static 'img/wlogo.png' %}" alt="" class="img-a img-fluid">
+            </div>
+          </nav>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+  <!--/ Intro Single End /-->
+
+  <!--/ About Star /-->
+  <section class="section-about">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-md-12 section-t8">
+          <div class="row">
+            <div class="col-md-6 col-lg-5">
+              <div class="title-box-d">
+                <h3 class="title-d" style="color:red;">About WeekendGo
+                  <span class="color-d"></span>
+
+              </div>
+              <p style="font-size: 0.9rem; font-weight: bold; color:red; ">At WeekendGo, we are committed to providing a seamless and supportive living experience for our users. Our mission is to simplify the search for suitable Villas and Resorts accommodations in Ahmedabad, India, by offering comprehensive information, detailed insights, and expert guidance. We strive to create a platform that not only helps users explore and compare various  options but also ensures a comfortable and hassle-free stay.
+</p>
+
+            </div>
+            <div class="col-lg-2  d-none d-lg-block">
+
+            </div>
+            <div class="col-md-6 col-lg-5 section-md-t3">
+              <div class="title-box-d">
+                <h3 class="title-d" style="color:red;">Our Mission
+                  <span class="color-d"></span>
+
+              </div>
+              <p class="color-text-a" style="font-size: 0.9rem; font-weight: bold;color:red;  ">
+               Our goal is to make WeekendGo your trusted companion for finding a place to relax and enjoy, where you can feel cared for, supported. We aim to redefine the Villas and Resorts accommodation experience in Ahmedabad, making it a haven of comfort, convenience, and community.
+              </p>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--/ About End /-->
+
+
+  <!--/ Team End /-->
+
+  <!--/ footer Star /-->
+  <section class="section-footer" style="background-color: #800000">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 col-md-4">
+          <div class="widget-a">
+            <div class="w-header-a">
+              <h3 class="w-title-a text-brand" style="color:white">WeekendGo</h3>
+            </div>
+          </div>
+         </div>
+</div>
+       <div class="row" style="justify-content: flex-end; margin: 0;">
+ <div style="text-align: right; width: auto;">
+              <ul class="list-unstyled" style="list-style-type: none; padding: 0; margin: 0;">
+                <li class="color-a" style="color:white">
+                  <span class="color-text-a" style="color:white">Phone : </span>+54 356 945234</li>
+                <li class="color-a" style="color:white">
+                  <span class="color-text-a" style="color:white">Email : </span>  contact@example.com</li>
+              </ul>
+</div>
+           <div style="text-align: right; margin-left: 20px; width: auto;">
+
+ <p style="color:white">Ahemdabad<br>
+      Gujarat<br>
+      India</p>
+       </div>
+       </div>
+
+      <div class="row" style="justify-content: flex-end; margin: 0;">
+        <div style="text-align: right; margin-left: 20px; width: auto;">
+          <b style="color:white"> Stay Connected with us<br>abc@gmail.com</b>
+      </div>
+
+      </div>
+    </div>
+  </section>
+  <footer style="background-color:#800000;">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+
+
+          <div class="copyright-footer">
+            <p class="copyright color-text-a" style="color:white">
+              &copy; Copyright
+              <span class="color-a" style="color:white">WeekendGo</span> All Rights Reserved.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!--/ Footer End /-->
+
+  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+  <div id="preloader"></div>
+
+  <!-- JavaScript Libraries -->
+  <script src="/static/lib/jquery/jquery.min.js"></script>
+  <script src="/static/lib/jquery/jquery-migrate.min.js"></script>
+  <script src="/static/lib/popper/popper.min.js"></script>
+  <script src="/static/lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/static/lib/easing/easing.min.js"></script>
+  <script src="/static/lib/owlcarousel/owl.carousel.min.js"></script>
+  <script src="/static/lib/scrollreveal/scrollreveal.min.js"></script>
+  <!-- Contact Form JavaScript File -->
+  <script src="/static/contactform/contactform.js"></script>
+
+  <!-- Template Main Javascript File -->
+  <script src="/static/js/main.js"></script>
+
+</body>
+</html>

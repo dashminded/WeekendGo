@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PG Booked Successful</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #0A1E3F;
+      color: #fff;
+    }
+
+    .payment-container {
+      text-align: center;
+      background: #FAF9F6;
+      color: #0A1E3F;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .thumbs-up {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 15px;
+    }
+
+    .thumbs-up img {
+      width: 100%;
+      height: auto;
+      border-radius: 50%;
+      background: white;
+      padding: 3px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #0A1E3F;
+      color: #fff;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #4CAF50;
+    }
+  </style>
+</head>
+<body>
+{% load static %}
+  <div class="payment-container">
+    <div class="thumbs-up">
+      <!-- Replace the src URL with your GIF URL -->
+      <img src="{% static 'img/tick.gif' %}" alt="Thumbs Up GIF">
+    </div>
+    <h1>Your Villa has been booked Successful</h1>
+    <p>Thank you for your payment! Your transaction has been completed.</p>
+    <a href="/home/" class="btn">Go to Homepage</a>
+  </div>
+</body>
+</html>

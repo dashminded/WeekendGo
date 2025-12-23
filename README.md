@@ -88,20 +88,6 @@ Improves booking security and reduces fraudulent transactions.
 
 ----------------------------------------------------
 
-🏗 System Architecture
----------------------
-Frontend (HTML, CSS, JavaScript)
-        |
-Backend (Python – Django / Flask)
-        |
---------------------------------------------------
-| Database | Sentiment Analysis | Fraud Detection |
---------------------------------------------------
-        |
-External APIs (🗺 Maps, 💳 Payments)
-
-----------------------------------------------------
-
 🔄 Machine Learning Workflow
 ----------------------------
 

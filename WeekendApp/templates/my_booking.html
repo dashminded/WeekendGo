@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>My Bookings</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+
+  <!-- Bootstrap CSS File -->
+  <link href="/static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="/static/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/static/lib/animate/animate.min.css" rel="stylesheet">
+  <link href="/static/lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+  <link href="/static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+  <!-- Main Stylesheet File -->
+  <link href="/static/css/style.css" rel="stylesheet">
+</head>
+
+<body style="background-color:white;">
+{% load static %}
+
+<!-- Navbar -->
+<nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top" style="background-color:#FAF9F6">
+  <div class="container">
+    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault"
+      aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+
+    <img src="{% static 'img/wlogo.png' %}" alt="" class="img-a img-fluid" style="height: 100px;">
+
+    <div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
+      <ul class="navbar-nav" style="color:#5C4033;">
+        <li class="nav-item"><a class="nav-link" href="/home/" style="color:red">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about/" style="color:red">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="/pgs/" style="color:red">Villas and Resorts</a></li>
+        <li class="nav-item"><a class="nav-link" href="/feedback/" style="color:red">Feedback</a></li>
+        <li class="nav-item"><a class="nav-link active" href="/my_bookings/" style="color:red">My Bookings</a></li>
+      </ul>
+    </div>
+
+    <div style="float: right; margin-right: 20px;">
+      <ul style="list-style-type:none;">
+        {% if user.is_authenticated %}
+          <li><a> Welcome {{user.username}}</a></li>
+          <li><a href="/bookmarks/">Bookmarks</a></li>
+          <li><a href="/logout/">Logout</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- / Navbar End -->
+
+<!-- Page Heading -->
+<section class="intro-single">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-lg-8">
+        <div class="title-single-box">
+          <h1 class="title-single" style="color:red;">My Bookings</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Bookings Section -->
+<section class="property-grid grid">
+  <div class="container">
+    <div class="row">
+
+      {% if bookings %}
+        {% for booking in bookings %}
+        <div class="col-md-6">
+          <div class="card mb-4 shadow-sm" style="border-radius: 12px; overflow: hidden;">
+            <img src="{% static 'img/v.jpg' %}" class="card-img-top" alt="PG Image">
+            <div class="card-body" style="background-color:#F0FFFF;">
+              <h5 class="card-title" style="color:#800000;">{{ booking.pg.pg_name }}</h5>
+              <p class="card-text"><strong>Check-in:</strong> {{ booking.check_in }}</p>
+              <p class="card-text"><strong>Check-out:</strong> {{ booking.check_out }}</p>
+              <p class="card-text"><strong>Total Amount:</strong> ₹{{ booking.amount }}</p>
+              <a href="{% url 'generate_receipt' booking.id %}" class="btn btn-success">
+  Download Booking Receipt
+</a>
+
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-md-12">
+          <p>No bookings found.</p>
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<section class="section-footer" style="background-color: #800000">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 col-md-4">
+        <div class="widget-a">
+          <div class="w-header-a">
+            <h3 class="w-title-a text-brand" style="color:white">WeekendGo</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="justify-content: flex-end; margin: 0;">
+      <div style="text-align: right; width: auto;">
+        <ul class="list-unstyled">
+          <li style="color:white">Phone : +54 356 945234</li>
+          <li style="color:white">Email : contact@example.com</li>
+        </ul>
+      </div>
+      <div style="text-align: right; margin-left: 20px; width: auto;">
+        <p style="color:white">Ahmedabad<br> Gujarat<br> India</p>
+      </div>
+    </div>
+
+    <div class="row" style="justify-content: flex-end; margin: 0;">
+      <div style="text-align: right; margin-left: 20px; width: auto;">
+        <b style="color:white"> Stay Connected with us<br>abc@gmail.com</b>
+      </div>
+    </div>
+  </div>
+</section>
+<footer style="background-color:#800000;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="copyright-footer">
+          <p class="copyright color-text-a" style="color:white">
+            &copy; Copyright
+            <span class="color-a" style="color:white">WeekendGo</span> All Rights Reserved.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+<div id="preloader"></div>
+
+<!-- JavaScript Libraries -->
+<script src="/static/lib/jquery/jquery.min.js"></script>
+<script src="/static/lib/jquery/jquery-migrate.min.js"></script>
+<script src="/static/lib/popper/popper.min.js"></script>
+<script src="/static/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/lib/easing/easing.min.js"></script>
+<script src="/static/lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="/static/lib/scrollreveal/scrollreveal.min.js"></script>
+<script src="/static/contactform/contactform.js"></script>
+<script src="/static/js/main.js"></script>
+
+</body>
+</html>

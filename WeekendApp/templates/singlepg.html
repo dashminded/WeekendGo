@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>WeekendGo</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+
+  <!-- Favicons -->
+  <link href="img/favicon.png" rel="icon">
+  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+
+  <!-- Bootstrap CSS File -->
+  <link href="/static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="/static/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/static/lib/animate/animate.min.css" rel="stylesheet">
+  <link href="/static/lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+  <link href="/static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+  <!-- Main Stylesheet File -->
+  <link href="/static/css/style.css" rel="stylesheet">
+ <style>
+        .bookmark-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .bookmark-btn:hover {
+            background-color: #45a049;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .bookmark-btn:active {
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .bookmark-btn svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            fill: white;
+            transition: fill 0.3s;
+        }
+
+        .bookmark-btn:hover svg {
+            fill: #e8f5e9;
+        }
+    </style>
+
+</head>
+
+<body style="background-color:white;">
+{% load static %}
+  <div class="click-closed"></div>
+  <!--/ Form Search Star /-->
+
+  <!--/ Form Search End /-->
+
+  <!--/ Form Search End /-->
+
+  <!--/ Nav Star /-->
+  <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top" style="background-color:#FAF9F6">
+  <div class="container">
+    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault"
+      aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+
+    <img src="{% static 'img/wlogo.png' %}" alt="" class="img-a img-fluid" style="height: 100px;">
+
+    <div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
+      <ul class="navbar-nav" style="color:#5C4033;">
+        <li class="nav-item"><a class="nav-link active" href="/home/" style="color:red">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about/" style="color:red">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="/pgs/" style="color:red">Villas and Resorts</a></li>
+        <li class="nav-item"><a class="nav-link " href="/feedback/" style="color:red">Feedback</a></li>
+        <li class="nav-item"><a class="nav-link " href="/my_bookings/" style="color:red">My Bookings</a></li>
+      </ul>
+    </div>
+
+    <div style="float: right; margin-right: 20px;">
+      <ul style="list-style-type:none;">
+        {% if user.is_authenticated %}
+          <li><a> Welcome {{user.username}}</a></li>
+          <li><a href="/bookmarks/">Bookmarks</a></li>
+          <li><a href="/logout/">Logout</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+  <!--/ Nav End /-->
+
+
+  <!--/ Intro Single star /-->
+  <section class="intro-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-8">
+          <div class="title-single-box">
+            <h1 class="title-single" style="color:red;">{{ p.pg_name }}</h1>
+            <span class="color-text-a" style="color:red;">{{ p.area }}</span>
+          </div>
+        </div>
+        <div class="col-md-12 col-lg-4">
+          <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+            <ol class="breadcrumb">
+                <form action="{% url 'add_to_bookmarks' p.id %}" method="post" enctype="multipart/form-data">
+                     {% csrf_token %}
+          <button class="bookmark-btn" type="submit" style="background-color: red; color: white; border-radius: 30px; padding: 10px 30px;
+               font-weight: bold; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M19 21.5a.76.76 0 0 1-.35-.09L12 17.45l-6.65 3.96A.75.75 0 0 1 4 20.75V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16.75a.75.75 0 0 1-1.11.66L12 17.45l-6.65 3.96A.76.76 0 0 1 5 21.5Z"/>
+        </svg>
+        Bookmark
+           </button>
+                </form>
+
+
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--/ Intro Single End /-->
+
+  <!--/ Property Single Star /-->
+  <section class="property-single nav-arrow-b">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div id="property-single-carousel" class="owl-carousel owl-arrow gallery-property" >
+            <div class="carousel-item-b" >
+              <img src="{% static 'img/r.jpg' %}" alt="">
+            </div>
+            <div class="carousel-item-b">
+              <img src="{% static 'img/image.jpg' %}" alt="">
+            </div>
+            <div class="carousel-item-b">
+              <img src="{% static 'img/image.jpg' %}" alt="">
+            </div>
+          </div>
+          <div class="row justify-content-between">
+            <div class="col-md-5 col-lg-4">
+              <div class="property-price d-flex justify-content-center foo">
+                <div class="card-header-c d-flex">
+
+                  <div class="card-title-c align-self-center">
+                    <h5 class="title-c" style="color:red;">{{ p.rent }} Rs.</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="property-summary">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="title-box-d section-t4">
+                      <h3 class="title-d" style="color:red;">Quick Summary</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="summary-list">
+                  <ul class="list" style="color:white;">
+                    <li class="d-flex justify-content-between">
+                      <strong style="color:red;">ID:</strong>
+                      <span style="color:red;"> {{ p.id }}</span>
+                    </li>
+
+                    <li class="d-flex justify-content-between">
+                      <strong style="color:red;">Beds:</strong>
+                      <span style="color:red;">{{ p.beds }}</span>
+                    </li>
+                    <li class="d-flex justify-content-between">
+                      <strong style="color:red;">Baths:</strong>
+                      <span style="color:red;">{{ p.baths }}</span>
+                    </li>
+                     <li class="d-flex justify-content-between">
+                      <strong style="color:red;">Nearest College:</strong>
+                      <span style="color:red;">{{ p.college.college_name }}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-7 col-lg-7 section-md-t3">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="title-box-d">
+                    <h3 class="title-d" style="color:red;">Amenities</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="property-description">
+                <p class="description color-text-a">
+          <ul style="font-size: 1.7em;" style="color:red;">
+    {% for amenity in amenities_list %}
+        <li style="color:red;">{{ amenity }}</li>
+    {% endfor %}
+</ul>
+
+                </p>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-10 offset-md-1">
+          <ul class="nav nav-pills-a nav-pills mb-3 section-t3" id="pills-tab" role="tablist">
+
+
+            <li class="nav-item">
+              <a class="nav-link" id="pills-map-tab" data-toggle="pill" href="#pills-map" role="tab" aria-controls="pills-map"
+                aria-selected="false" style="color:red;">Location</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+
+            <div class="tab-pane fade" id="pills-plans" role="tabpanel" aria-labelledby="pills-plans-tab">
+              <img src="img/plan2.jpg" alt="" class="img-fluid">
+            </div>
+            <div class="tab-pane fade" id="pills-map" role="tabpanel" aria-labelledby="pills-map-tab">
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1422937950147!2d-73.98731968482413!3d40.75889497932681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes+Square!5e0!3m2!1ses-419!2sve!4v1510329142834"
+                width="100%" height="460" frameborder="0" style="border:0" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row section-t3">
+            <div class="col-sm-12">
+              <div class="title-box-d">
+                <h3 class="title-d" style="color:red;">Contact Owner</h3>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-lg-4">
+              <img src="img/agent-4.jpg" alt="" class="img-fluid">
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="property-agent">
+                <h4 class="title-agent" style="color:red;">{{ p.owner.owner_name }}</h4>
+                <ul class="list-unstyled">
+                  <li class="d-flex justify-content-between">
+                    <strong style="color:white;">Phone:</strong>
+                    <span class="color-text-a" style="color:red;">{{ p.owner.number }}</span>
+                  </li>
+
+                </ul>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--/ Property Single End /-->
+ <div style="text-align: center;">
+ <a href="{% url 'book_pg' p.id %}">
+  <button type="button" class="btn btn-primary btn-lg book-now-button"
+    style="background-color: red; color: white; border-radius: 30px; padding: 10px 30px;
+           font-weight: bold; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+    Book Now
+  </button>
+</a>
+</div>
+
+
+
+  <!--/ footer Star /-->
+<section class="section-footer" style="background-color: #800000">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 col-md-4">
+          <div class="widget-a">
+            <div class="w-header-a">
+              <h3 class="w-title-a text-brand" style="color:white">WeekendGo</h3>
+            </div>
+          </div>
+         </div>
+</div>
+       <div class="row" style="justify-content: flex-end; margin: 0;">
+ <div style="text-align: right; width: auto;">
+              <ul class="list-unstyled" style="list-style-type: none; padding: 0; margin: 0;">
+                <li class="color-a" style="color:white">
+                  <span class="color-text-a" style="color:white">Phone : </span>+54 356 945234</li>
+              <li class="color-a" style="color:white">
+                  <span class="color-text-a" style="color:white">Email : </span>  contact@example.com</li>
+              </ul>
+</div>
+           <div style="text-align: right; margin-left: 20px; width: auto;">
+
+ <p style="color:white">Ahemdabad<br>
+      Gujarat<br>
+      India</p>
+       </div>
+       </div>
+
+      <div class="row" style="justify-content: flex-end; margin: 0;">
+        <div style="text-align: right; margin-left: 20px; width: auto;">
+          <b style="color:white"> Stay Connected with us<br>abc@gmail.com</b>
+      </div>
+
+      </div>
+    </div>
+  </section>
+  <footer style="background-color:#800000;">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+
+
+          <div class="copyright-footer">
+            <p class="copyright color-text-a" style="color:white">
+              &copy; Copyright
+              <span class="color-a" style="color:white">WeekendGo</span> All Rights Reserved.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!--/ Footer End /-->
+
+  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+  <div id="preloader"></div>
+
+  <!-- JavaScript Libraries -->
+  <script src="/static/lib/jquery/jquery.min.js"></script>
+  <script src="/static/lib/jquery/jquery-migrate.min.js"></script>
+  <script src="/static/lib/popper/popper.min.js"></script>
+  <script src="/static/lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/static/lib/easing/easing.min.js"></script>
+  <script src="/static/lib/owlcarousel/owl.carousel.min.js"></script>
+  <script src="/static/lib/scrollreveal/scrollreveal.min.js"></script>
+  <!-- Contact Form JavaScript File -->
+  <script src="/static/contactform/contactform.js"></script>
+
+  <!-- Template Main Javascript File -->
+  <script src="/static/js/main.js"></script>
+
+</body>
+</html>

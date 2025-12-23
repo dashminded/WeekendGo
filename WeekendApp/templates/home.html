@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="utf-8">
+  <title>WeekendGo</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+
+
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+
+  <!-- Bootstrap CSS File -->
+  <link href="/static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="/static/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/static/lib/animate/animate.min.css" rel="stylesheet">
+  <link href="/static/lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+  <link href="/static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+  <!-- Main Stylesheet File -->
+  <link href="/static/css/style.css" rel="stylesheet">
+<style>
+/* Chatbot Icon */
+.chatbot-icon {
+    position: fixed;
+    top: 90px;   /* moved down so it's below navbar */
+    right: 20px;
+    background: #dc3545;
+    color: white;
+    padding: 12px;
+    border-radius: 50%;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 5000;  /* higher than navbar */
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease-in-out;
+}
+.chatbot-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Chatbot Container */
+.chatbot-container {
+    display: none;
+    position: fixed;
+    top: 140px;   /* place below navbar */
+    right: 20px;
+    width: 320px;
+    height: 400px;
+    background: white;
+    border: 2px solid #dc3545;
+    border-radius: 12px;
+    box-shadow: 0px 6px 12px rgba(0,0,0,0.3);
+    z-index: 5001; /* above everything */
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Header */
+.chatbot-header {
+    background: #dc3545;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.close-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Messages */
+.chatbot-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* spacing between messages */
+}
+
+.message {
+    padding: 10px 14px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word;
+    line-height: 1.4;
+    font-size: 14px;
+}
+
+/* User messages (right side, red background) */
+.user-message {
+    background: #dc3545;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+/* Bot messages (left side, light background) */
+.bot-message {
+    background: #f1f1f1;
+    color: #222;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+/* Question Buttons */
+.chatbot-questions {
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background: #fafafa;
+}
+.chatbot-questions button {
+    display: block;
+    width: 100%;
+    margin-bottom: 6px;
+    padding: 8px;
+    border: none;
+    background: #dc3545;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.chatbot-questions button:hover {
+    background: #a71d2a;
+}
+
+.quick-replies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  justify-content: flex-start;
+}
+
+.quick-replies button {
+  background: #222;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+.quick-replies button:hover {
+  background: #444;
+}
+
+.recommendations {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.recommendation-card {
+  background: #fff8f8;
+  border: 1px solid #dc3545;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 13px;
+  box-shadow: 0px 3px 6px rgba(0,0,0,0.1);
+}
+
+.recommendation-card h4 {
+  margin: 0 0 5px;
+  font-size: 15px;
+  color: #dc3545;
+}
+
+</style>
+
+<!-- JS -->
+
+
+</head>
+
+<body style="background-color:white;">
+<div id="chatbot-icon" class="chatbot-icon">
+    💬
+</div>
+
+<!-- Chatbot Container -->
+<div id="chatbot" class="chatbot-container">
+    <div class="chatbot-header">
+        <span>ChatBot</span>
+        <button id="close-chat" class="close-btn">✖</button>
+    </div>
+    <div id="chatbot-messages" class="chatbot-messages"></div>
+
+</div>
+
+
+<script>
+const chatbotIcon = document.getElementById("chatbot-icon");
+const chatbot = document.getElementById("chatbot");
+const closeChat = document.getElementById("close-chat");
+const messages = document.getElementById("chatbot-messages");
+
+chatbotIcon.onclick = () => {
+    chatbot.style.display = "flex";
+    chatbotIcon.style.display = "none";
+    showQuickReplies(); // 👈 add back here
+};
+
+closeChat.onclick = () => {
+    chatbot.style.display = "none";
+    chatbotIcon.style.display = "block";
+};
+
+// Core Q&A function
+function askQuestion(question) {
+    addMessage(question, "user");
+    const lowerQ = question.toLowerCase();
+
+    if (lowerQ.includes("recommend") || lowerQ.includes("suggest") || lowerQ.includes("pg")) {
+        handleRecommendation(question);
+    } else if (lowerQ.includes("rent")) {
+        reply("The rent depends on the Villa/Hotels. Please check the property details.");
+    } else if (lowerQ.includes("amenities")) {
+        reply("Our Villas/Hotels offer Wi-Fi, parking, swimming pool, and more.");
+    } else if (lowerQ.includes("beds") || lowerQ.includes("bedrooms")) {
+        reply("Most Hotels and villas have 2 to 4 bedrooms available.");
+    } else {
+        reply("Sorry, I don't understand that question.");
+    }
+}
+
+// Handle recommendation logic
+function handleRecommendation(question) {
+    let words = question.split(" ");
+    let location = "";
+    for (let i = 0; i < words.length; i++) {
+        if (words[i].toLowerCase() === "in" && i + 1 < words.length) {
+            location = words.slice(i + 1).join(" ");
+            break;
+        }
+    }
+
+    let url = "/api/recommend/";
+    if (location) {
+        url += "?location=" + encodeURIComponent(location);
+    }
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error || data.length === 0) {
+                reply("⚠️ Sorry, no PGs found for that location.");
+            } else {
+                let container = document.createElement("div");
+                container.classList.add("recommendations");
+
+                data.forEach(pg => {
+                    const card = document.createElement("div");
+                    card.classList.add("recommendation-card");
+                    card.innerHTML = `
+                        <h4>🏠 ${pg.name}</h4>
+                        <p>📍 ${pg.location}</p>
+                        <p>💰 ₹${pg.rent}/month</p>
+                        <p>✨ ${pg.amenities}</p>
+                    `;
+                    container.appendChild(card);
+                });
+
+                messages.appendChild(container);
+                messages.scrollTop = messages.scrollHeight;
+
+                showQuickReplies();
+            }
+        })
+        .catch(() => reply("⚠️ Sorry, I couldn't fetch recommendations right now."));
+}
+
+// Bot reply
+function reply(text) {
+    setTimeout(() => {
+        addMessage(text, "bot");
+        showQuickReplies(); // ✅ only here
+    }, 600);
+}
+
+// Add message
+function addMessage(text, sender) {
+    const msg = document.createElement("div");
+    msg.classList.add("message", sender === "user" ? "user-message" : "bot-message");
+    msg.innerHTML = text.replace(/\n/g, "<br>");
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
+}
+
+// Show quick replies
+function showQuickReplies() {
+    // 🔥 Clear old quick replies first
+    document.querySelectorAll(".quick-replies").forEach(el => el.remove());
+
+    const quickReplies = [
+        "🏠 Recommend me a hotel or villa in Ahmedabad",  // highlight recommend option
+        "💰 What is the rent?",
+        "✨ What amenities are available?",
+        "🛏️ How many beds are there?"
+    ];
+
+    const container = document.createElement("div");
+    container.classList.add("quick-replies");
+
+    quickReplies.forEach(q => {
+        const btn = document.createElement("button");
+        btn.innerText = q;
+        btn.onclick = () => {
+            container.remove(); // remove current set before asking
+            askQuestion(q);
+        };
+        container.appendChild(btn);
+    });
+
+    messages.appendChild(container);
+    messages.scrollTop = messages.scrollHeight;
+}
+
+</script>
+
+{% load static %}
+  <div class="click-closed"></div>
+
+
+  <!--/ Nav Star /-->
+ <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top" style="background-color:#FAF9F6">
+  <div class="container">
+    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault"
+      aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+
+    <img src="{% static 'img/wlogo.png' %}" alt="" class="img-a img-fluid" style="height: 100px;">
+
+    <div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
+      <ul class="navbar-nav" style="color:#5C4033;">
+        <li class="nav-item"><a class="nav-link active" href="/home/" style="color:red">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about/" style="color:red">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="/pgs/" style="color:red">Villas and Resorts</a></li>
+        <li class="nav-item"><a class="nav-link " href="/feedback/" style="color:red">Feedback</a></li>
+        <li class="nav-item"><a class="nav-link " href="/my_bookings/" style="color:red">My Bookings</a></li>
+      </ul>
+    </div>
+
+    <div style="float: right; margin-right: 20px;">
+      <ul style="list-style-type:none;">
+        {% if user.is_authenticated %}
+      {% if user.is_superuser %}
+        <li><a href="/admin-dashboard/">Welcome {{ user.username }}</a></li>
+      {% else %}
+        <li>Welcome {{ user.username }}</li>
+      {% endif %}
+          <li><a href="/bookmarks/">Bookmarks</a></li>
+          <li><a href="/logout/">Logout</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+  <!--/ Nav End /-->
+
+  <!--/ Carousel Star /-->
+
+
+
+  <div class="intro intro-carousel">
+    <div id="carousel" class="owl-carousel owl-theme">
+{% for i in latest_pg %}
+
+      <div class="carousel-item-a intro-item bg-image" style="background-image: url('{% static 'img/v.jpg' %}');">
+        <div class="overlay overlay-a"></div>
+        <div class="intro-content display-table">
+          <div class="table-cell">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="intro-body">
+                    <h1 class="intro-title mb-4">
+                      <span class="color-b"></span> {{i.pg_name}}
+                      <br>{{i.area}} </h1>
+                    <p class="intro-subtitle intro-price">
+                      <a href="/pgs/"><span class="price-a">rent | {{i.rent}}</span></a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!--/ Carousel end /-->
+
+ <section class="section-agents section-t8">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="title-wrap d-flex justify-content-between">
+                    <div class="title-box">
+                        <h2 class="title-a" style="color:red;">Our Services</h2>
+                    </div>
+                </div>
+
+                <!-- Service 1: PG Consultation with Button -->
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h4 class="mb-0" style="color:red;">Tour plans </h4>
+
+                </div>
+
+                <!-- Service 2: PG Site Visit with Button -->
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h4 class="mb-0" style="color:red;">Accommodations</h4>
+
+                </div>
+
+                <!-- Service 3: PG Instant Booking with Button -->
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h4 class="mb-0" style="color:red;">Premium Facilities</h4>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+  <!--/ Property Star /-->
+  <section class="section-property section-t8">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="title-wrap d-flex justify-content-between">
+            <div class="title-box">
+              <h2 class="title-a" style="color:red;">Latest Additions</h2>
+            </div>
+            <div class="title-link">
+              <a href="/pgs/" style="color:red;">All Villas and resorts
+                <span class="ion-ios-arrow-forward"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <section class="property-grid grid">
+    <div class="container">
+
+      <div class="row">
+        {% for i in p %}
+        <div class="col-md-4">
+          <div class="card-box-a card-shadow">
+            <div class="img-box-a">
+              <img src="{% static 'img/r.jpg' %}" alt="" class="img-a img-fluid">
+            </div>
+            <div class="card-overlay">
+              <div class="card-overlay-a-content">
+                <div class="card-header-a">
+                  <h2 class="card-title-a">
+                    <a href="#">{{i.pg_name}}
+                      <br />  </a>
+                  </h2>
+                </div>
+                <div class="card-body-a">
+                  <div class="price-box d-flex">
+                    <span class="price-a">rent |{{i.rent}}</span>
+                  </div>
+                  <a href="{% url 'singlepg' i.id %}" class="link-a">Click here to view
+                    <span class="ion-ios-arrow-forward"></span>
+                  </a>
+                </div>
+                <div class="card-footer-a">
+                  <ul class="card-info d-flex justify-content-around">
+                    <li>
+                      <h4 class="card-info-title">Area</h4>
+                      <span>{{i.area}}
+
+                      </span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">Beds</h4>
+                      <span>{{i.beds}}</span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">Baths</h4>
+                      <span>{{i.baths}}</span>
+                    </li>
+
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+          {% endfor %}
+
+
+     </div>
+    </div>
+  </section>
+  <!--/ Property End /-->
+
+
+
+
+
+  <!--/ Testimonials Star /-->
+ <section class="section-testimonials section-t8 nav-arrow-a">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="title-wrap d-flex justify-content-between">
+          <div class="title-box">
+            <h2 class="title-a" style="color:red;">Feedback</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carousel wrapper OUTSIDE the loop -->
+    <div id="testimonial-carousel" class="owl-carousel owl-arrow">
+      {% for i in f %}
+      <div class="carousel-item-a" style="margin: auto;">
+        <div class="testimonials-box" style="align-self-center">
+          <div class="col-sm-12 col-md-6">
+            <div class="testimonial-ico">
+              <span class="ion-ios-quote"></span>
+            </div>
+            <div class="testimonials-content">
+              <p class="testimonial-text" style="color:red;">
+                {{ i.feedback }}
+              </p>
+            </div>
+            <div class="testimonial-author-box">
+              <h5 class="testimonial-author" style="color:red;">
+                {{ i.user.username }}
+              </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <!-- end carousel -->
+  </div>
+</section>
+
+
+      </div>
+    </div>
+  </section>
+  <!--/ Testimonials End /-->
+
+  <<!--/ footer Star /-->
+ <section class="section-footer" style="background-color: #800000">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 col-md-4">
+          <div class="widget-a">
+            <div class="w-header-a">
+              <h3 class="w-title-a text-brand" style="color:white">WeekendGo</h3>
+            </div>
+          </div>
+         </div>
+</div>
+       <div class="row" style="justify-content: flex-end; margin: 0;">
+ <div style="text-align: right; width: auto;">
+              <ul class="list-unstyled" style="list-style-type: none; padding: 0; margin: 0;">
+                <li class="color-a" style="color:white">
+                  <span class="color-text-a" style="color:white">Phone : </span>+54 356 945234</li>
+                <li class="color-a" style="color:white">
+                  <span class="color-text-a" style="color:white">Email : </span>  contact@example.com</li>
+              </ul>
+</div>
+           <div style="text-align: right; margin-left: 20px; width: auto;">
+
+ <p style="color:white">Ahemdabad<br>
+      Gujarat<br>
+      India</p>
+       </div>
+       </div>
+
+      <div class="row" style="justify-content: flex-end; margin: 0;">
+        <div style="text-align: right; margin-left: 20px; width: auto;">
+          <b style="color:white"> Stay Connected with us<br>abc@gmail.com</b>
+      </div>
+
+      </div>
+    </div>
+  </section>
+  <footer style="background-color:#800000;">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+
+
+          <div class="copyright-footer">
+            <p class="copyright color-text-a" style="color:white">
+              &copy; Copyright
+              <span class="color-a" style="color:white">WeekendGo</span> All Rights Reserved.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!--/ Footer End /-->
+  <!--/ Footer End /-->
+
+  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+  <div id="preloader"></div>
+
+  <!-- JavaScript Libraries -->
+  <script src="/static/lib/jquery/jquery.min.js"></script>
+  <script src="/static/lib/jquery/jquery-migrate.min.js"></script>
+  <script src="/static/lib/popper/popper.min.js"></script>
+  <script src="/static/lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/static/lib/easing/easing.min.js"></script>
+  <script src="/static/lib/owlcarousel/owl.carousel.min.js"></script>
+  <script src="/static/lib/scrollreveal/scrollreveal.min.js"></script>
+  <!-- Contact Form JavaScript File -->
+  <script src="/static/contactform/contactform.js"></script>
+
+  <!-- Template Main Javascript File -->
+  <script src="/static/js/main.js"></script>
+
+</body>
+</html>
